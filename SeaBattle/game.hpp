@@ -27,7 +27,7 @@ class Game {
     second_player.SetBoard(b1);
     std::shared_ptr<Board> b2 = Ident(second_player, "Player2");
     first_player.SetBoard(b2);
-    while (1) {
+    while (true) {
       first_player.Play();
       if (first_player.IsWin()) {
         Print("\nWinner is player " + first_player.GetName() + "\n");

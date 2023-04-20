@@ -86,33 +86,38 @@ class Board {
     std::array<int, 4> dcol = {0, 0, 1, -1};
     std::vector<std::pair<int, int>> CellsWithShip;
     std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
-    for (int i = 0; i < SIZE_OF_BOARD; ++i) used[i].fill(false);
+    fill(used, false);
     DfsForKill(used, row, col, drow, dcol, CellsWithShip);
     if (!IsShipDie(CellsWithShip)) return false;
     KillShip(CellsWithShip);
     return true;
   }
 
-  bool Verify() {
+  bool IsNoContactsBetweenShips() {
     std::array<int, 4> drow = {1, 1, -1, -1};
     std::array<int, 4> dcol = {1, -1, 1, -1};
     for (int row = 0; row < SIZE_OF_BOARD; ++row) {
       for (int col = 0; col < SIZE_OF_BOARD; ++col) {
-        if (!IsEmpty(row, col)) {
-          for (int i = 0; i < 4; ++i) {
-            int newrow = row + drow[i];
-            int newcol = col + dcol[i];
-            if (IsExist(newrow, newcol) && !IsEmpty(newrow, newcol)) {
-              return false;
-            }
+        if (IsEmpty(row, col)) {
+          continue;
+        }
+        for (int i = 0; i < 4; ++i) {
+          int newrow = row + drow[i];
+          int newcol = col + dcol[i];
+          if (IsExist(newrow, newcol) && !IsEmpty(newrow, newcol)) {
+            return false;
           }
         }
       }
     }
-    drow = {1, -1, 0, 0};
-    dcol = {0, 0, 1, -1};
+    return true;
+  }
+
+  bool IsCorrectShips() {
+    std::array<int, 4> drow = {1, -1, 0, 0};
+    std::array<int, 4> dcol = {0, 0, 1, -1};
     std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
-    for (int i = 0; i < SIZE_OF_BOARD; ++i) used[i].fill(false);
+    fill(used, false);
     const std::map<int, int> right = {{4, 1}, {3, 2}, {2, 3}, {1, 4}};
     std::map<int, int> now;
     for (int row = 0; row < SIZE_OF_BOARD; ++row) {
@@ -122,18 +127,21 @@ class Board {
         }
       }
     }
-    if (now != right) {
+    return now == right;
+  }
+
+  bool Verify() {
+    if (!IsNoContactsBetweenShips()) {
+      return false;
+    }
+    if (!IsCorrectShips()) {
       return false;
     }
     return true;
   }
 
  public:
-  Board() {
-    for (int i = 0; i < SIZE_OF_BOARD; ++i) {
-      board[i].fill(Cell::Unknown);
-    }
-  }
+  Board() { fill(board, Cell::Unknown); }
 
   void ClosePrint() {
     std::cout << "  ";
