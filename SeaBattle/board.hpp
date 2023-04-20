@@ -17,7 +17,8 @@ const char Wounded = 'W', Kill = 'K', Empty = '.';
 
 class Board {
  private:
-  std::array<std::array<char, 10>, 10>
+  static const int SIZE_OF_BOARD = 10;
+  std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD>
       board;  // (Unknown or Live) or (Wounded or Kill or Epty)
   int dies = 0;
 
@@ -26,11 +27,12 @@ class Board {
   }
 
   bool IsExist(int row, int col) {
-    return 0 <= row && row < 10 && 0 <= col && col < 10;
+    return 0 <= row && row < SIZE_OF_BOARD && 0 <= col && col < SIZE_OF_BOARD;
   }
 
-  int Dfs(std::array<std::array<bool, 10>, 10>& used, int row, int col,
-          const std::array<int, 4>& drow, const std::array<int, 4>& dcol) {
+  int Dfs(std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD>& used,
+          int row, int col, const std::array<int, 4>& drow,
+          const std::array<int, 4>& dcol) {
     int cnt = 1;
     used[row][col] = 1;
     for (int i = 0; i < 4; ++i) {
@@ -44,10 +46,10 @@ class Board {
     return cnt;
   }
 
-  void DfsForKill(std::array<std::array<bool, 10>, 10>& used, int row, int col,
-                  const std::array<int, 4>& drow,
-                  const std::array<int, 4>& dcol,
-                  std::vector<std::pair<int, int>>& CellsWithShips) {
+  void DfsForKill(
+      std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD>& used, int row,
+      int col, const std::array<int, 4>& drow, const std::array<int, 4>& dcol,
+      std::vector<std::pair<int, int>>& CellsWithShips) {
     used[row][col] = true;
     CellsWithShips.push_back({row, col});
     for (int i = 0; i < 4; ++i) {
@@ -60,33 +62,42 @@ class Board {
     }
   }
 
-  bool CheckKill(int row, int col) {
-    std::array<int, 4> drow = {1, -1, 0, 0};
-    std::array<int, 4> dcol = {0, 0, 1, -1};
-    std::vector<std::pair<int, int>> CellsWithShips;
-    std::array<std::array<bool, 10>, 10> used;
-    for (int i = 0; i < 10; ++i) used[i].fill(false);
-    DfsForKill(used, row, col, drow, dcol, CellsWithShips);
-    for (auto i : CellsWithShips) {
+  void KillShip(const std::vector<std::pair<int, int>>& CellsWithShip) {
+    for (auto i : CellsWithShip) {
+      int row = i.first;
+      int col = i.second;
+      board[row][col] = Cell::Kill;
+    }
+  }
+
+  bool IsShipDie(const std::vector<std::pair<int, int>>& CellsWithShip) {
+    for (auto i : CellsWithShip) {
       int row = i.first;
       int col = i.second;
       if (board[row][col] == Cell::Live) {
         return false;
       }
     }
-    for (auto i : CellsWithShips) {
-      int row = i.first;
-      int col = i.second;
-      board[row][col] = Cell::Kill;
-    }
+    return true;
+  }
+
+  bool CheckKill(int row, int col) {
+    std::array<int, 4> drow = {1, -1, 0, 0};
+    std::array<int, 4> dcol = {0, 0, 1, -1};
+    std::vector<std::pair<int, int>> CellsWithShip;
+    std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
+    for (int i = 0; i < SIZE_OF_BOARD; ++i) used[i].fill(false);
+    DfsForKill(used, row, col, drow, dcol, CellsWithShip);
+    if (!IsShipDie(CellsWithShip)) return false;
+    KillShip(CellsWithShip);
     return true;
   }
 
   bool Verify() {
     std::array<int, 4> drow = {1, 1, -1, -1};
     std::array<int, 4> dcol = {1, -1, 1, -1};
-    for (int row = 0; row < 10; ++row) {
-      for (int col = 0; col < 10; ++col) {
+    for (int row = 0; row < SIZE_OF_BOARD; ++row) {
+      for (int col = 0; col < SIZE_OF_BOARD; ++col) {
         if (!IsEmpty(row, col)) {
           for (int i = 0; i < 4; ++i) {
             int newrow = row + drow[i];
@@ -100,12 +111,12 @@ class Board {
     }
     drow = {1, -1, 0, 0};
     dcol = {0, 0, 1, -1};
-    std::array<std::array<bool, 10>, 10> used;
-    for (int i = 0; i < 10; ++i) used[i].fill(false);
+    std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
+    for (int i = 0; i < SIZE_OF_BOARD; ++i) used[i].fill(false);
     const std::map<int, int> right = {{4, 1}, {3, 2}, {2, 3}, {1, 4}};
     std::map<int, int> now;
-    for (int row = 0; row < 10; ++row) {
-      for (int col = 0; col < 10; ++col) {
+    for (int row = 0; row < SIZE_OF_BOARD; ++row) {
+      for (int col = 0; col < SIZE_OF_BOARD; ++col) {
         if (!IsEmpty(row, col) && !used[row][col]) {
           ++now[Dfs(used, row, col, drow, dcol)];
         }
@@ -119,20 +130,20 @@ class Board {
 
  public:
   Board() {
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < SIZE_OF_BOARD; ++i) {
       board[i].fill(Cell::Unknown);
     }
   }
 
   void ClosePrint() {
     std::cout << "  ";
-    for (int i = 1; i <= 10; ++i) {
+    for (int i = 1; i <= SIZE_OF_BOARD; ++i) {
       std::cout << i << ' ';
     }
     std::cout << std::endl;
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < SIZE_OF_BOARD; ++i) {
       std::cout << char('a' + i) << ' ';
-      for (int j = 0; j < 10; ++j) {
+      for (int j = 0; j < SIZE_OF_BOARD; ++j) {
         if (board[i][j] == Cell::Live)
           std::cout << Cell::Unknown;
         else
@@ -143,7 +154,7 @@ class Board {
     }
   }
 
-  bool IsItWin() { return dies == 10; }
+  bool IsItWin() { return dies == SIZE_OF_BOARD; }
 
   bool Try(int row, int col) {
     if (board[row][col] == Cell::Live) {
@@ -167,8 +178,8 @@ class Board {
 
   void Input() {
     while (1) {
-      for (int i = 0; i < 10; ++i) {
-        for (int j = 0; j < 10; ++j) {
+      for (int i = 0; i < SIZE_OF_BOARD; ++i) {
+        for (int j = 0; j < SIZE_OF_BOARD; ++j) {
           std::cin >> board[i][j];
         }
       }

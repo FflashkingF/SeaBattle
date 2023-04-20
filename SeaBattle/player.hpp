@@ -1,19 +1,20 @@
 #pragma once
+#include <memory>
 #include <string>
+
 #include "board.hpp"
 
 class Player {
  private:
-  Board* board;
+  std::shared_ptr<Board> board;
   std::string name;
 
  public:
-
   Player() : board(nullptr) {}
 
   void SetName(std::string name) { this->name = name; }
 
-  void SetBoard(Board* b) { board = b; }
+  void SetBoard(std::shared_ptr<Board> b) { board = b; }
 
   bool IsWin() { return board->IsItWin(); }
 
