@@ -182,9 +182,6 @@ class Board {
       board[row][col] = Cell::Empty;
       Print("\nMiss\n");
       return false;
-    } else {
-      Print("else\nEXEPT\nALARMA\nGG\n");
-      throw "aboba";  /////////////////////////////////
     }
   }
 
