@@ -143,6 +143,10 @@ class Board {
  public:
   Board() { fill(board, Cell::Unknown); }
 
+  bool IsCanAttacked(int row, int col) {
+    return board[row][col] == Cell::Unknown || board[row][col] == Cell::Live;
+  }
+
   void ClosePrint() {
     std::cout << "  ";
     for (int i = 1; i <= SIZE_OF_BOARD; ++i) {
@@ -185,7 +189,7 @@ class Board {
   }
 
   void Input() {
-    while (1) {
+    while (true) {
       for (int i = 0; i < SIZE_OF_BOARD; ++i) {
         for (int j = 0; j < SIZE_OF_BOARD; ++j) {
           std::cin >> board[i][j];
