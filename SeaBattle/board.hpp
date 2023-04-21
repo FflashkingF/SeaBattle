@@ -34,7 +34,7 @@ class Board {
           int row, int col, const std::array<int, 4>& drow,
           const std::array<int, 4>& dcol) {
     int cnt = 1;
-    used[row][col] = 1;
+    used[row][col] = true;
     for (int i = 0; i < 4; ++i) {
       int newrow = row + drow[i];
       int newcol = col + dcol[i];
@@ -178,11 +178,11 @@ class Board {
         Print("\nWounded\n");
       }
       return true;
-    } else if (board[row][col] == Cell::Unknown) {
-      board[row][col] = Cell::Empty;
-      Print("\nMiss\n");
-      return false;
     }
+    // board[row][col] == Cell::Unknown
+    board[row][col] = Cell::Empty;
+    Print("\nMiss\n");
+    return false;
   }
 
   void Input() {
