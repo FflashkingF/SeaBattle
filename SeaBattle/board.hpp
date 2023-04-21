@@ -193,12 +193,18 @@ class Board {
       for (int i = 0; i < SIZE_OF_BOARD; ++i) {
         for (int j = 0; j < SIZE_OF_BOARD; ++j) {
           std::cin >> board[i][j];
+          if (board[i][j] != '#' && board[i][j] != 'L') {
+            std::cin.clear();
+            fflush(stdin);
+            goto stop;
+          }
         }
       }
       if (Verify()) {
         system("clear");
         break;
       } else {
+      stop:
         Print("BadInput\n");
         Print("TryAgain\n");
       }
