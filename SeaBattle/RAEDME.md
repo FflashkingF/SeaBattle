@@ -1,7 +1,5 @@
-
-g++ -std=c++17 main.cpp
-./a.out
-You can easily break programm, be carefully
+ 
+use CMakeLists.txt to generate executable SeaBattle
 
 Correct Field:
 LLLL######
