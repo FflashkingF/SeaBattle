@@ -1,6 +1,8 @@
 Now it has a cool Cmake
 use CMakeLists.txt to generate executable SeaBattle
 
+you can get random field or write field yourself:
+
 Correct Field:
 LLLL######
 ##########
