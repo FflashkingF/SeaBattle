@@ -3,14 +3,12 @@
 #include "../Visitor/visitor.hpp"
 #include "../Board/board.hpp"
 
-class Board;
-
 namespace DFS {
-    template <unsigned long SIZE_OF_BOARD>
+    template <size_t SIZE_OF_BOARD, size_t CNT_DIRECTIONS>
     void Dfs(Board& board,
                   std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD>& used,
-                  int row, int col, const std::array<int, 4>& drow,
-                  const std::array<int, 4>& dcol, Visitor& vis) {
+                  int row, int col, const std::array<int, CNT_DIRECTIONS>& drow,
+                  const std::array<int, CNT_DIRECTIONS>& dcol, Visitor& vis) {
         vis.VisitCell(row, col);
         used[row][col] = true;
         for (int i = 0; i < 4; ++i) {

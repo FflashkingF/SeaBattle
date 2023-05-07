@@ -138,8 +138,6 @@ void Board::Input() {
       for (int j = 0; j < SIZE_OF_BOARD; ++j) {
         std::cin >> board[i][j];
         if (board[i][j] != '#' && board[i][j] != 'L') {
-          std::cin.clear();
-          fflush(stdin);
           goto stop;
         }
       }
@@ -149,6 +147,8 @@ void Board::Input() {
       break;
     } else {
     stop:
+      std::cin.clear();
+      fflush(stdin);
       Print("BadInput\n");
       Print("TryAgain\n");
     }
