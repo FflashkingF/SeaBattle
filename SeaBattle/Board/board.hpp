@@ -36,6 +36,8 @@ class Board {
  public:
   Board();
 
+  Board(std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD>);
+  
   bool IsCanAttacked(int row, int col);
 
   void ClosePrint();

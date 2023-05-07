@@ -13,3 +13,5 @@ void fill(std::array<std::array<T, COL>, ROW>& arr, const T& value) {
         arr[i].fill(value);
     }
 }
+
+void ClearCin();

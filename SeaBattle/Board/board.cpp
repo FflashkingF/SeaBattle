@@ -1,5 +1,7 @@
 #include "board.hpp"
+
 #include "../DFS/dfs.hpp"
+#include "../FieldGenerator/generator.hpp"
 #include "../KillChecker/killchecker.hpp"
 
 bool Board::IsExist(int row, int col) {
@@ -8,12 +10,8 @@ bool Board::IsExist(int row, int col) {
 bool Board::IsEmpty(int row, int col) {
   return board[row][col] == Cell::Unknown || board[row][col] == Cell::Empty;
 }
-bool Board::IsAlive(int row, int col) {
-    return board[row][col] == Cell::Live;
-}
-void Board::KillCell(int row, int col) {
-    board[row][col] = Cell::Kill;
-}
+bool Board::IsAlive(int row, int col) { return board[row][col] == Cell::Live; }
+void Board::KillCell(int row, int col) { board[row][col] = Cell::Kill; }
 
 bool Board::IsNoContactsBetweenShips() {
   std::array<int, 4> drow = {1, 1, -1, -1};
@@ -65,6 +63,8 @@ bool Board::Verify() {
 }
 
 Board::Board() { fill(board, Cell::Unknown); }
+Board::Board(std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD> other)
+    : board(other) {}
 
 bool Board::IsCanAttacked(int row, int col) {
   return board[row][col] == Cell::Unknown || board[row][col] == Cell::Live;
@@ -123,8 +123,7 @@ void Board::Input() {
       break;
     } else {
     stop:
-      std::cin.clear();
-      fflush(stdin);
+      ClearCin();
       Print("BadInput\n");
       Print("TryAgain\n");
     }

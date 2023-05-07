@@ -18,17 +18,21 @@ add_subdirectory(Board)
 add_dependencies(board helper visitor)
 target_link_libraries(board helper visitor)
 
-add_subdirectory(DFS)
-add_dependencies(dfs board)
-target_link_libraries(dfs board)
-
 add_subdirectory(Player)
 add_dependencies(player board)
 target_link_libraries(player board)
 
+add_subdirectory(FieldGenerator)
+add_dependencies(generator board)
+target_link_libraries(generator board)
+
+add_subdirectory(DFS)
+add_dependencies(dfs board)
+target_link_libraries(dfs board)
+
 add_subdirectory(Game)
-add_dependencies(game player)
-target_link_libraries(game player)
+add_dependencies(game player generator)
+target_link_libraries(game player generator)
 
 add_executable(SeaBattle main.cpp)
 add_dependencies(SeaBattle game)
