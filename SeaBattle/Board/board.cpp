@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include "../DFS/dfs.hpp"
+#include "../KillChecker/killchecker.hpp"
 
 bool Board::IsExist(int row, int col) {
   return 0 <= row && row < SIZE_OF_BOARD && 0 <= col && col < SIZE_OF_BOARD;
@@ -7,36 +8,11 @@ bool Board::IsExist(int row, int col) {
 bool Board::IsEmpty(int row, int col) {
   return board[row][col] == Cell::Unknown || board[row][col] == Cell::Empty;
 }
-
-void Board::KillShip(const std::vector<std::pair<int, int>>& CellsWithShip) {
-  for (auto i : CellsWithShip) {
-    int row = i.first;
-    int col = i.second;
+bool Board::IsAlive(int row, int col) {
+    return board[row][col] == Cell::Live;
+}
+void Board::KillCell(int row, int col) {
     board[row][col] = Cell::Kill;
-  }
-}
-
-bool Board::IsShipDie(const std::vector<std::pair<int, int>>& CellsWithShip) {
-  for (auto i : CellsWithShip) {
-    int row = i.first;
-    int col = i.second;
-    if (board[row][col] == Cell::Live) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool Board::CheckKill(int row, int col) {
-  std::array<int, 4> drow = {1, -1, 0, 0};
-  std::array<int, 4> dcol = {0, 0, 1, -1};
-  std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
-  fill(used, false);
-  VisitorCollect vis;
-  DFS::Dfs(*this, used, row, col, drow, dcol, vis);
-  if (!IsShipDie(vis.CellsWithShips)) return false;
-  KillShip(vis.CellsWithShips);
-  return true;
 }
 
 bool Board::IsNoContactsBetweenShips() {
@@ -118,7 +94,7 @@ bool Board::IsItWin() { return dies == SIZE_OF_BOARD; }
 bool Board::Try(int row, int col) {
   if (board[row][col] == Cell::Live) {
     board[row][col] = Cell::Wounded;
-    if (CheckKill(row, col)) {
+    if (KillChecker::CheckKill(*this, row, col)) {
       ++dies;
       Print("\nKILL\n");
     } else {
