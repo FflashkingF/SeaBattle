@@ -1,18 +1,20 @@
 #pragma once
-#include "../Board/board.hpp"
+
+#include <vector>
 #include "../DFS/dfs.hpp"
+#include "../Board/board.hpp"
 
 namespace KillChecker {
-    void KillShip(Board& board, const std::vector<std::pair<int, int>>& CellsWithShip) {
-        for (auto i : CellsWithShip) {
+    void KillShip(Board &board, const std::vector<std::pair<int, int>> &CellsWithShip) {
+        for (auto i: CellsWithShip) {
             int row = i.first;
             int col = i.second;
             board.KillCell(row, col);
         }
     }
 
-    bool IsShipDie(Board& board, const std::vector<std::pair<int, int>>& CellsWithShip) {
-        for (auto i : CellsWithShip) {
+    bool IsShipDie(Board &board, const std::vector<std::pair<int, int>> &CellsWithShip) {
+        for (auto i: CellsWithShip) {
             int row = i.first;
             int col = i.second;
             if (board.IsAlive(row, col)) {
@@ -22,7 +24,7 @@ namespace KillChecker {
         return true;
     }
 
-    bool CheckKill(Board& board, int row, int col) {
+    bool CheckKill(Board &board, int row, int col) {
         std::array<int, 4> drow = {1, -1, 0, 0};
         std::array<int, 4> dcol = {0, 0, 1, -1};
         std::array<std::array<bool, Board::SIZE_OF_BOARD>, Board::SIZE_OF_BOARD> used;
