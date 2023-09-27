@@ -20,16 +20,12 @@ class Board {
   static const int SIZE_OF_BOARD = 10;
   static bool IsExist(int row, int col);
   bool IsEmpty(int row, int col);
+  bool IsAlive(int row, int col);
+  void KillCell(int row, int col);
  private:
   std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD>
       board;  // (Unknown or Live) or (Wounded or Kill or Epty)
   int dies = 0;
-
-  void KillShip(const std::vector<std::pair<int, int>>& CellsWithShip);
-
-  bool IsShipDie(const std::vector<std::pair<int, int>>& CellsWithShip);
-
-  bool CheckKill(int row, int col);
 
   bool IsNoContactsBetweenShips();
 
@@ -40,6 +36,8 @@ class Board {
  public:
   Board();
 
+  Board(std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD>);
+  
   bool IsCanAttacked(int row, int col);
 
   void ClosePrint();

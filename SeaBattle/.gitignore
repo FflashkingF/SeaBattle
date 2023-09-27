@@ -7,4 +7,5 @@ a.out
 cmake-build-debug
 lib
 bin
-../.idea/*
+../.idea/
+.vscode/

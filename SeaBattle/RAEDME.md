@@ -1,4 +1,4 @@
- 
+Now it has a cool Cmake
 use CMakeLists.txt to generate executable SeaBattle
 
 Correct Field:

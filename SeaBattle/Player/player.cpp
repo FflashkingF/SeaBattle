@@ -1,11 +1,14 @@
 #include "player.hpp"
+#include <ctype.h>
+
+int to_row(char ch) { return ch - 'a'; }
 
 bool Player::IsInputCorrect(const std::string& move) {
   bool bad = true;
   if (!('a' <= move[0] && move[0] <= 'j')) {
     return false;
   }
-  if (move.size() == 2 && '1' <= move[1] && move[1] <= '9') {
+  if (move.size() == 2 && std::isdigit(move[1])) {
     bad = false;
   } else if (move.size() == 3 && move[1] == '1' && move[2] == '0') {
     bad = false;
@@ -13,7 +16,7 @@ bool Player::IsInputCorrect(const std::string& move) {
   if (bad) {
     return false;
   }
-  int row = move[0] - 'a';
+  int row = to_row(move[0]);
   int col = std::stoi(move.substr(1, move.size() - 1)) - 1;
   if (board->IsCanAttacked(row, col)) {
     return true;
@@ -47,7 +50,7 @@ void Player::Play() {
       }
     }
 
-    int row = move[0] - 'a';
+    int row = to_row(move[0]);
     int col = std::stoi(move.substr(1, move.size() - 1)) - 1;
     bool needbreak = !board->Try(row, col);
     board->ClosePrint();

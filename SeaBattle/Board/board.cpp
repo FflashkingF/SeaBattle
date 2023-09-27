@@ -1,5 +1,8 @@
 #include "board.hpp"
+
 #include "../DFS/dfs.hpp"
+#include "../FieldGenerator/generator.hpp"
+#include "../KillChecker/killchecker.hpp"
 
 bool Board::IsExist(int row, int col) {
   return 0 <= row && row < SIZE_OF_BOARD && 0 <= col && col < SIZE_OF_BOARD;
@@ -7,37 +10,8 @@ bool Board::IsExist(int row, int col) {
 bool Board::IsEmpty(int row, int col) {
   return board[row][col] == Cell::Unknown || board[row][col] == Cell::Empty;
 }
-
-void Board::KillShip(const std::vector<std::pair<int, int>>& CellsWithShip) {
-  for (auto i : CellsWithShip) {
-    int row = i.first;
-    int col = i.second;
-    board[row][col] = Cell::Kill;
-  }
-}
-
-bool Board::IsShipDie(const std::vector<std::pair<int, int>>& CellsWithShip) {
-  for (auto i : CellsWithShip) {
-    int row = i.first;
-    int col = i.second;
-    if (board[row][col] == Cell::Live) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool Board::CheckKill(int row, int col) {
-  std::array<int, 4> drow = {1, -1, 0, 0};
-  std::array<int, 4> dcol = {0, 0, 1, -1};
-  std::array<std::array<bool, SIZE_OF_BOARD>, SIZE_OF_BOARD> used;
-  fill(used, false);
-  VisitorCollect vis;
-  DFS::Dfs(*this, used, row, col, drow, dcol, vis);
-  if (!IsShipDie(vis.CellsWithShips)) return false;
-  KillShip(vis.CellsWithShips);
-  return true;
-}
+bool Board::IsAlive(int row, int col) { return board[row][col] == Cell::Live; }
+void Board::KillCell(int row, int col) { board[row][col] = Cell::Kill; }
 
 bool Board::IsNoContactsBetweenShips() {
   std::array<int, 4> drow = {1, 1, -1, -1};
@@ -89,6 +63,8 @@ bool Board::Verify() {
 }
 
 Board::Board() { fill(board, Cell::Unknown); }
+Board::Board(std::array<std::array<char, SIZE_OF_BOARD>, SIZE_OF_BOARD> other)
+    : board(other) {}
 
 bool Board::IsCanAttacked(int row, int col) {
   return board[row][col] == Cell::Unknown || board[row][col] == Cell::Live;
@@ -118,7 +94,7 @@ bool Board::IsItWin() { return dies == SIZE_OF_BOARD; }
 bool Board::Try(int row, int col) {
   if (board[row][col] == Cell::Live) {
     board[row][col] = Cell::Wounded;
-    if (CheckKill(row, col)) {
+    if (KillChecker::CheckKill(*this, row, col)) {
       ++dies;
       Print("\nKILL\n");
     } else {
@@ -138,8 +114,6 @@ void Board::Input() {
       for (int j = 0; j < SIZE_OF_BOARD; ++j) {
         std::cin >> board[i][j];
         if (board[i][j] != '#' && board[i][j] != 'L') {
-          std::cin.clear();
-          fflush(stdin);
           goto stop;
         }
       }
@@ -149,6 +123,7 @@ void Board::Input() {
       break;
     } else {
     stop:
+      ClearCin();
       Print("BadInput\n");
       Print("TryAgain\n");
     }

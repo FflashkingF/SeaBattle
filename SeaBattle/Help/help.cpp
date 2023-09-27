@@ -8,3 +8,8 @@ std::string GetPlayerInput(std::string prompt) {
   std::cin >> input;
   return input;
 }
+
+void ClearCin() {
+  std::cin.clear();
+  fflush(stdin);
+}
