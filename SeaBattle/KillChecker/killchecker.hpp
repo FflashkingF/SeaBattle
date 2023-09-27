@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "../DFS/dfs.hpp"
 #include "../Board/board.hpp"
+#include "../Board/dfs.hpp"
 
 namespace KillChecker {
     void KillShip(Board &board, const std::vector<std::pair<int, int>> &CellsWithShip) {

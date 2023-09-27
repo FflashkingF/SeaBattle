@@ -1,6 +1,6 @@
 #include "board.hpp"
 
-#include "../DFS/dfs.hpp"
+#include "dfs.hpp"
 #include "../KillChecker/killchecker.hpp"
 
 bool Board::IsExist(int row, int col) {
