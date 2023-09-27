@@ -1,7 +1,6 @@
 #include "board.hpp"
 
 #include "../DFS/dfs.hpp"
-#include "../FieldGenerator/generator.hpp"
 #include "../KillChecker/killchecker.hpp"
 
 bool Board::IsExist(int row, int col) {

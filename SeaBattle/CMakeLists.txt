@@ -30,6 +30,10 @@ add_subdirectory(DFS)
 add_dependencies(dfs board)
 target_link_libraries(dfs board)
 
+add_subdirectory(KillChecker)
+add_dependencies(killchecker board dfs)
+target_link_libraries(killchecker board dfs)
+
 add_subdirectory(Game)
 add_dependencies(game player generator)
 target_link_libraries(game player generator)
@@ -37,3 +41,7 @@ target_link_libraries(game player generator)
 add_executable(SeaBattle main.cpp)
 add_dependencies(SeaBattle game)
 target_link_libraries(SeaBattle game)
+
+install(TARGETS SeaBattle helper killchecker visitor board player generator dfs game
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib)
