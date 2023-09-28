@@ -2,21 +2,18 @@
 
 1) git clone git@github.com:FflashkingF/SeaBattle.git (from git@gitlab.akhcheck.ru:fiodor.astashkin/project_tp.git, and I am Fedor, not fiodor:))
 
-2) cd project_tp
+2) cd Seabattle
 
-3) git checkout checkpoint_3
+3) mkdir build
 
-4) cd SeaBattle
+4) cd build
 
-5) mkdir build
+6) cmake ..
+   
+7) make (so now you have executable file -  Seabattle/bin/SeaBattle)
 
-6) cd build
-
-7) cmake ..
-
+also you can do after 6):
 8) sudo make install (after this command you have to write your password)
-
-9) SeaBattle (this is your executable, which is situated in your bin directory)
 
 ### Used project patterns: Visitor
 
