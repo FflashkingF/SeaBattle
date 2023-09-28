@@ -1,6 +1,6 @@
 # Comands for execute my project
 
-1) git clone git@gitlab.akhcheck.ru:fiodor.astashkin/project_tp.git
+1) git clone git@github.com:FflashkingF/SeaBattle.git (from git@gitlab.akhcheck.ru:fiodor.astashkin/project_tp.git, and I am Fedor, not fiodor:))
 
 2) cd project_tp
 
