@@ -1,2 +1,13 @@
 /.DS_Store
 .idea
+.DS_Store
+main.dSYM
+main
+build
+.idea
+a.out
+cmake-build-debug
+lib
+bin
+../.idea/
+.vscode/
